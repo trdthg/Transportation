@@ -56,13 +56,15 @@ fig = plt.figure(figsize=(20,40))
 # fig.set_figwidth(100)
 i=0
 k=0
+j=0
 for line in lines:
     
     ax = plt.subplot2grid((int(len(routes)/2),2), (i,k), rowspan=1, colspan=1)
     x = line.keys()
     y = line.values()
     ax.plot(x, y)
-    ax.set_title(routes[i], fontproperties="FangSong")
+    ax.set_title(routes[j], fontproperties="FangSong")
+    j += 1
     i += 1
     if k==0: 
         k=1
