@@ -8,7 +8,7 @@ def main():
 
 def getDataList():
 
-    book_users = xlrd.open_workbook('dataFolder/users.xls')
+    book_users = xlrd.open_workbook('dataFolder/users.xlsx')
     sheet_users = book_users.sheets()[0]
     col_datalist_users_age = sheet_users.col_values(2,start_rowx=1,end_rowx=None)
     col_datalist_users_gender = sheet_users.col_values(3,start_rowx=1,end_rowx=None)

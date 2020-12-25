@@ -2,51 +2,68 @@ import xlrd
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.gridspec as gridspec
+import multiprocessing as mp
 
-book_station = xlrd.open_workbook('dataFolder/station.xls')
-book_trips = xlrd.open_workbook('dataFolder/trips.xls')
-sheet_station = book_station.sheets()[0]
-sheet_trips = book_trips.sheets()[0]
-
-col_datalist_station_station = sheet_station.col_values(1,start_rowx=1,end_rowx=None)
-col_datalist_station_route = sheet_station.col_values(2,start_rowx=1,end_rowx=None)
-
+routes_stations = {}
+allstations = set()
 def main():
-    datalist = getdatalist()
-    drawpicture_one(datalist[0], datalist[1])
+    print('正在获取文件')
+    book_station = xlrd.open_workbook('dataFolder/station.xlsx')
+    book_trips = xlrd.open_workbook('dataFolder/trips.xlsx')
+    print('正在获取表格')
+    sheet_station = book_station.sheets()[0]
+    sheet_trips = book_trips.sheets()[0]
+    print('正在解析表格')
+    col_datalist_station_station = sheet_station.col_values(1,start_rowx=1,end_rowx=None)
+    col_datalist_station_route = sheet_station.col_values(2,start_rowx=1,end_rowx=None)
+    col_datalist_trips_arrival = sheet_trips.col_values(3,start_rowx=1,end_rowx=None)
+
+    # routes_stations = {}
+    # allstations = set()
+    print('开始统计')
+
+
+    getdatalist(routes_stations, col_datalist_station_route, col_datalist_station_station, allstations)
+    multicore(col_datalist_trips_arrival,allstations)
+    drawpicture_one()
     # drawpicture_many(lines)
-    plt.show()
+    
 
-def Statistics(router):
-        line = {}
-        # 添加1号线的站点 
-        for station, route in zip(col_datalist_station_station,col_datalist_station_route):
-            if route == router:
-                if station not in line.keys():
-                    line[station.split('a')[1]] = 0
-                # else: 
-                #     line[station] += 1
-        # 计算1号线各个站点的总入站量
-        col_datalist_trips_arrival = sheet_trips.col_values(1,start_rowx=1,end_rowx=None)
-        for arrival in col_datalist_trips_arrival:
-            if arrival.split('a')[1] in line:
-                line[arrival.split('a')[1]] += 1
-        # for key, value in line.items():
-        #     print(f'{key}:{value}')
-        # print(line)
-        return line
+def getstations(router,col_datalist_station_station,col_datalist_station_route):
+    global allstations
+    for station, route in zip(col_datalist_station_station,col_datalist_station_route):
+        routes_stations[route].add(station)
+        allstations.add(station)
 
-def getdatalist():
-    # routes = []
-    # for route in col_datalist_station_route:
-    #     if route not in routes:
-    #         routes.append(route)
-    routes = list(set(col_datalist_station_route))
-    print(routes)
-    lines = []
-    for route in routes:
-        lines.append(Statistics(route))
-    return [lines,routes]
+def getdatalist(routes_stations, col_datalist_station_route, col_datalist_station_station, allstations):
+    # global allstations
+    for route in set(col_datalist_station_route):
+        routes_stations[route] = set()
+    print('得到了所有的线路')
+    print(routes_stations.keys())
+    for route in routes_stations.keys():
+        print(f'正在获取{route}的车站')
+        getstations(route,col_datalist_station_station,col_datalist_station_route)
+        print(routes_stations[route])
+
+    i = []
+    allstations = list(allstations)
+    for k in range( len(allstations) ):
+        i.append(0)
+    allstations = dict(zip(allstations, i))
+        
+    
+def gettrip(arrival):
+    global allstations
+    allstations[arrival] += 1
+
+def multicore(col_datalist_trips_arrival,allstations):
+    print('多核遍历中')
+    # global col_datalist_trips_arrival
+    # global allstations
+    pool = mp.Pool()
+    result = pool.map(gettrip, col_datalist_trips_arrival)
+    print (allstations)
 
 def drawpicture_many(lines):
         # 单图展示
@@ -60,29 +77,34 @@ def drawpicture_many(lines):
                 label.set_fontsize(10)
             plt.plot(x,y)
             # break
+        print('开始绘图')
+        plt.show()
 
-def drawpicture_one(lines,routes):
+def drawpicture_one():
         fig = plt.figure(figsize=(20,40))
         # fig.set_figheight(300)
         # fig.set_figwidth(100)
         i=0
         k=0
         j=0
-        for line in lines:
-            
-            ax = plt.subplot2grid((int(len(routes)/2),2), (i,k), rowspan=1, colspan=1)
-            x = line.keys()
-            y = line.values()
-            ax.plot(x, y)
-            ax.set_title(routes[j], fontproperties="FangSong")
+        for route in routes_stations.keys():
+            ax = plt.subplot2grid( ( int(len(routes_stations.keys())/2.0)+1 , 2), (i,k), rowspan=1, colspan=1)
+            x = routes_stations[route]  # x为关于线路上站点的列表
+            y = []
+            for station in x:
+                y.append(allstations[station])
+            ax.plot(list(x), list(y))
+            ax.set_title(routes_stations.keys(), fontproperties="FangSong")
             j += 1
             i += 1
             if k==0: 
                 k=1
-                i-=1
+                i-=5
             else: k=0
-        plt.tight_layout(w_pad=10, h_pad=20)
+        plt.tight_layout(w_pad=5, h_pad=15)
         # plt.subplots_adjust(hspace =20)#调整子图间距
+        print('开始绘图')
+        plt.show()
 
 if __name__ == '__main__':
     main()
