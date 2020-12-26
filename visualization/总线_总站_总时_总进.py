@@ -5,7 +5,6 @@ import matplotlib.gridspec as gridspec
 import multiprocessing as mp
 
 routes_stations = {}
-allstations = set()
 def main():
     print('正在获取文件')
     book_station = xlrd.open_workbook('dataFolder/station.xlsx')
@@ -18,22 +17,40 @@ def main():
     col_datalist_station_route = sheet_station.col_values(2,start_rowx=1,end_rowx=None)
     col_datalist_trips_arrival = sheet_trips.col_values(3,start_rowx=1,end_rowx=None)
 
+    allstations = mp.Manager().dict()
+
     # routes_stations = {}
     # allstations = set()
     print('开始统计')
-
-
     getdatalist(routes_stations, col_datalist_station_route, col_datalist_station_station, allstations)
-    multicore(col_datalist_trips_arrival,allstations)
-    drawpicture_one()
+
+    print('多核遍历中')
+    pool = mp.Pool(12)
+    for arrival in col_datalist_trips_arrival:
+        pool.apply_async(gettrip, (arrival, allstations))   #维持执行的进程总数为processes，当一个进程执行完毕后会添加新的进程进去
+    pool.close()
+    pool.join()   #调用join之前，先调用close函数，否则会出错。执行完close后不会有新的进程加入到pool,join函数等待所有子进程结束
+    print ("Sub-process(es) done.")
+
+    # for arrival in col_datalist_trips_arrival:
+    #     allstations[arrival] += 1
+    print (allstations)
+
+    drawpicture_one(allstations)
     # drawpicture_many(lines)
     
+    
+def gettrip(arrival,allstations):
+    # global allstations
+    print(arrival)
+    allstations[arrival] += 1
 
-def getstations(router,col_datalist_station_station,col_datalist_station_route):
-    global allstations
+def getstations(router,col_datalist_station_station,col_datalist_station_route, allstations):
+    # global allstations
     for station, route in zip(col_datalist_station_station,col_datalist_station_route):
         routes_stations[route].add(station)
-        allstations.add(station)
+        if station not in allstations.keys():
+            allstations[station] = 0
 
 def getdatalist(routes_stations, col_datalist_station_route, col_datalist_station_station, allstations):
     # global allstations
@@ -43,27 +60,9 @@ def getdatalist(routes_stations, col_datalist_station_route, col_datalist_statio
     print(routes_stations.keys())
     for route in routes_stations.keys():
         print(f'正在获取{route}的车站')
-        getstations(route,col_datalist_station_station,col_datalist_station_route)
+        getstations(route,col_datalist_station_station,col_datalist_station_route, allstations)
         print(routes_stations[route])
 
-    i = []
-    allstations = list(allstations)
-    for k in range( len(allstations) ):
-        i.append(0)
-    allstations = dict(zip(allstations, i))
-        
-    
-def gettrip(arrival):
-    global allstations
-    allstations[arrival] += 1
-
-def multicore(col_datalist_trips_arrival,allstations):
-    print('多核遍历中')
-    # global col_datalist_trips_arrival
-    # global allstations
-    pool = mp.Pool()
-    result = pool.map(gettrip, col_datalist_trips_arrival)
-    print (allstations)
 
 def drawpicture_many(lines):
         # 单图展示
@@ -80,7 +79,7 @@ def drawpicture_many(lines):
         print('开始绘图')
         plt.show()
 
-def drawpicture_one():
+def drawpicture_one(allstations):
         fig = plt.figure(figsize=(20,40))
         # fig.set_figheight(300)
         # fig.set_figwidth(100)
