@@ -22,7 +22,7 @@ with open('dataFolder/trips.csv') as f:
         
         # if dettime<0:
             # print (dettime)
-        rows.append([f'{row[1]}',f'{row[3]}',dettime/60, f'{row[2]}{row[4]}'])
+        rows.append([f'{row[1]}',f'{row[3]}',dettime/60.0, f'{row[2]}{row[4]}'])
         # # print (outtime)
 with open('dataFolder/a_b_0.csv','w',newline='') as f2:
     f2_csv = csv.writer(f2)
