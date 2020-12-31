@@ -1,14 +1,46 @@
-import numpy as np
-
-time = '6/18/20 19:46'
-# print(time.split('/')[1][1])
-a = np.arange(1,13,1)
-# print(a[4])
-
-a = set()
-a.add(1)
-a.add(2)
-a.add(3)
-a = list(a)
-# print(a)
-print(int('09')*60 + int('009'))
+sdict = {'origin':{
+            'before':{
+                'a11':{
+                    'a111':{
+                    },
+                    },
+                'a12':{
+                    'a121':{
+                        'a1211':{
+                        },
+                        },
+                        },
+                        },
+            'after':{
+                'b11':{
+                    'b21':{
+                    },
+                    },
+                    },
+                    },
+        'sss':{}}
+def sss(child_dict):
+    for key in child_dict.keys():
+        print(key)
+        child_dict_ = child_dict[key]
+        if child_dict_ == {}:
+            # 到达尽头
+            continue
+        else:
+            # 深入到下一层
+            sss(child_dict_)
+# for key in sdict.keys():
+#     print (key)
+#     child_dict = sdict[key]
+#     # 子字典自我遍历
+#     for key in child_dict.keys():
+#         print(key)
+#         child_dict_ = child_dict[key]
+#         if child_dict_ == {}:
+#             # 到达尽头
+#             continue
+#         else:
+#             # 深入到下一层
+#             sss(child_dict_)
+# flag = 0
+sss(sdict)
