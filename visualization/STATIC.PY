@@ -19,9 +19,18 @@ $判断是否出现过相同站点:
         1) 滞后处理
         2) 没法办
 '''
+station_dict = {}
+stain = ''
+staout = ''
+flag = [0,0]   # 标记两个站点的存在状态
+is_over = 0
+another_child_key = 0
+
 def dict_ergodic(father_dict):
+    global flag
     # -----标记遍历这个嵌套字典-----
     for key in father_dict.keys():  #处理措施放这里
+        # print(key)
         child_dict = father_dict[key]
         if flag==[1,1]:
             break
@@ -34,9 +43,28 @@ def dict_ergodic(father_dict):
         else:
             dict_ergodic(child_dict)  # 深入到下一层
 
-def dict_ergodic2(father_dict):
+def dict_ergodic_in(father_dict):
     # -----遍历这个嵌套字典-----
+    global another_child_key
+    global is_over
     for key in father_dict.keys():  #处理措施放这里
+        if is_over==1:
+            break
+        if key==stain:
+            child_dict = father_dict[key]
+            # 无子节点
+            if child_dict == {}:
+                over = 1
+                child_dict[staout] = {}
+                break
+            # 有子节点, 记下他的名字
+            else:
+                for key in child_dict.keys():
+                    another_child_key = key
+                    break
+                child_dict[staout] = {}
+                break
+
         child_dict = father_dict[key]
         
         if child_dict == {}:
@@ -44,10 +72,6 @@ def dict_ergodic2(father_dict):
         else:
             dict_ergodic(child_dict)  # 深入到下一层
 
-station_dict = {}
-stain = ''
-staout = ''
-flag = [0,0]   # 标记两个站点的存在状态
 with open('./dataFolder/a_b_same.csv') as f:
     f = csv.reader(f)
     i = 0
@@ -57,7 +81,7 @@ with open('./dataFolder/a_b_same.csv') as f:
             continue
         if i==1:
             i+=1
-            station_dict[row[0]] = {row[3]: ''}
+            station_dict[row[0]] = {row[3]: {}}
             continue
         # ['Sta64', '1号线', 'Dist3', 'Sta150', '1号线', 'Dist3', '3']
         stain, staout = row[0], row[3]
@@ -67,14 +91,28 @@ with open('./dataFolder/a_b_same.csv') as f:
         if flag==[1,1]:
             pass
         elif flag==[1,0]:
-            pass 
+            # 找到两个子节点
+            dict_ergodic_in(station_dict)
+            # 判断谁在前
+
+            # with open('./dataFolder/a_b_same.csv') as f2:
+            #     f2 = csv.reader(f2)
+            #     compile_time = {}
+            #     for row in f2:
+            #         if row[0] == stain and row[3] != another_child_key :
+            #             compile_time[row[3]] = [row[0], ,
+            #             pass
+            
         elif flag==[0,1]:
+            # dict_ergodic_out(station_dict)
             pass
         elif flag==[1,1]:
             pass
         # 重制标记
         flag = [0,0]
+        is_over = 0
+        another_child_key = 0
 
         i += 1
 
-# print(station_dict)
+print(station_dict)
