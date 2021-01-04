@@ -16,9 +16,8 @@ def getstations():
                 routes[row[2]].append(row[1])
     return routes
 
-stationdatalist = getstations()
-print(stationdatalist.keys())
 def jjj(j, arr, route):
+
     # print(j)
     flag = 0
     if j >= len(stationdatalist[route])*2-2:
@@ -97,35 +96,42 @@ def jjj(j, arr, route):
         #     print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
 
         jjj(j, arr, route)
-for route in getstations().keys():
-    with open('./dataFolder/a_b_same.csv') as f:
-        f = csv.reader(f)
-        i = 0
-        arr = [0,0,0]
-        for row in f:
-            if i==0:
+
+def main():
+    
+    for route in getstations().keys():
+        with open('./dataFolder/a_b_same.csv') as f:
+            f = csv.reader(f)
+            i = 0
+            arr = [0,0,0]
+            for row in f:
+                if i==0:
+                    i+=1
+                    continue
+                if row[1]==route and row[4]==route:
+                    i+=1
+                    arr[0] = row[0]
+                    arr[1] = row[6]
+                    arr[2] = row[3]
+                    # print (arr)
+                    jjj(2, arr, route)
+                    break
+                # ['Sta64', '1号线', 'Dist3', 'Sta150', '1号线', 'Dist3', '3']
                 i+=1
-                continue
-            if row[1]==route and row[4]==route:
-                i+=1
-                arr[0] = row[0]
-                arr[1] = row[6]
-                arr[2] = row[3]
-                # print (arr)
-                jjj(2, arr, route)
-                break
-            # ['Sta64', '1号线', 'Dist3', 'Sta150', '1号线', 'Dist3', '3']
-            i+=1
-    # print(arr[-1])
-    with open('./dataFolder/a_b_same.csv') as f:
-        f = csv.reader(f)
-        for row in f:
-            if (row[0]==arr[-1] and row[3]==arr[0]) or (row[0]==arr[0] and row[3]==arr[-1]):
-                arr.append(row[6])
-                break
+        # print(arr[-1])
+        with open('./dataFolder/a_b_same.csv') as f:
+            f = csv.reader(f)
+            for row in f:
+                if (row[0]==arr[-1] and row[3]==arr[0]) or (row[0]==arr[0] and row[3]==arr[-1]):
+                    arr.append(row[6])
+                    break
+        stationdatalist[route] = arr
+        print (route,arr)
+        # break
+    # print(stationdatalist)
 
-    print (route,arr)
-    # break
+stationdatalist = getstations()
 
-
-
+if __name__ == '__main__':
+    main()
+# 5号线 ['Sta43', '6', 'Sta10', '4', 'Sta96', '4', 'Sta132', '4', 'Sta37', '3', 'Sta16', '4', 'Sta69', '10', 'Sta54', '26']
