@@ -18,7 +18,6 @@ def getstations():
 
 def jjj(j, arr, route):
 
-    # print(j)
     flag = 0
     if j >= len(stationdatalist[route])*2-2:
         pass
@@ -29,17 +28,13 @@ def jjj(j, arr, route):
         sta2 = ''
         with open('./dataFolder/a_b_same.csv') as f1:
             f1 = csv.reader(f1)
-            
             for row_ in f1:
                 if row_[1]==route and row_[4]==route:
                     stain, staout, time = row_[0], row_[3], row_[6]
                     if arr[j] == stain:
                         if staout not in arr:
-                            # print(stain, staout)
                             time1 = time
                             sta1 = staout
-                            # arr.append(time)
-                            # arr.append(staout)
                             j += 2
                             flag = 1
                             break
@@ -47,12 +42,9 @@ def jjj(j, arr, route):
                         if stain not in arr:
                             time1 = time
                             sta1 = stain
-                            # arr.append(time)
-                            # arr.append(stain)  
                             j += 2
                             flag = 1
                             break
-            # f1 = csv.reader(f1)
         with open('./dataFolder/a_b_same.csv') as f1:
             f1 = csv.reader(f1)
             for row__ in f1:
@@ -60,11 +52,8 @@ def jjj(j, arr, route):
                     stain, staout, time = row__[0], row__[3], row__[6]
                     if arr[0] == stain:
                         if staout not in arr:
-                            # print(stain, staout)
                             time2 = time
                             sta2 = staout
-                            # arr.append(time)
-                            # arr.append(staout)
                             j += 2
                             flag = 1
                             break
@@ -72,12 +61,9 @@ def jjj(j, arr, route):
                         if stain not in arr:
                             time2 = time
                             sta2 = stain
-                            # arr.append(time)
-                            # arr.append(stain)  
                             j += 2
                             flag = 1
                             break
-        # print(route,time1,time2)
         if time2 != '' and time1 != '':
             j-=2
             if int(time1) >= int(time2):
@@ -92,9 +78,6 @@ def jjj(j, arr, route):
         if time1 == '' and time2 !='':
             arr.insert(0, time2)
             arr.insert(0, sta2)
-        # else: 
-        #     print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
-
         jjj(j, arr, route)
 
 def main():
