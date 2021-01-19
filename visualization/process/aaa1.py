@@ -13,4 +13,15 @@ year = trips['进站时间'].dt.year
 month = trips['进站时间'].dt.month
 print(month)
 
-print( trips.loc[ trips['进站时间'].dt.month.isin([2,3,5,6,7]) ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 1 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 2 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 3 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 4 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 5 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 6 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 7 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 8 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 9 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 10 ]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 11]['进站时间'].count())  
+print( trips.loc[ trips['进站时间'].dt.month == 12]['进站时间'].count())  
