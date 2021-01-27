@@ -79,7 +79,7 @@ x_test = []
 for anyday, dayprop, dayprop_num, month, day, flow in zip( anydays, dayprop_onehot, dayprops, np.array(df['month']), np.array(df['day']), np.array(daily_flow_scaled)):
     # print(dayprop_num)
     # x_arr =  [flow[0], month , ]
-    x_arr =  [ flow[0], ] + list(dayprop) + [month, int(anyday),]
+    x_arr =  [ flow[0], ] + list(dayprop) + [month, int(anyday)]
     # x_arr =   [ flow[0]] + [int(anyday), month, day, ]
     y_arr = flow
     # print(y_arr)
@@ -119,129 +119,131 @@ x_test = np.reshape(x_test, (x_test.shape[0], 14, len(x_arr)))
 print(x_train[0])
 print(x_test[0])
 print(y_train[0])
-print("正在搭建模型")
-model = tf.keras.Sequential([
-    # Embedding(503, 64),
-    # GRU(16, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
-    # GRU(128, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
-    # GRU(128, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
-    # GRU(64),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),
-    GRU(150, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    Dropout(0.2),
-    GRU(100, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),   
-    # GRU(50, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),
-    # GRU(25, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),
-    # GRU(160, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),
-    # GRU(160, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),
-    # GRU(180, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
-    # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
-    # GRU(140, return_sequences=True),
-    # Dropout(0.2),
-    GRU(80),
-    Dropout(0.2),
-    Dense(1),
-    # Dropout(0.2),
-    # Dense(1),
-    # tf.keras.layers.Flatten(),
-    # GRU(3, return_sequences=True),
-    # GRU(1),
-    # tf.keras.layers.Dense(512, activation='swish'),
-    # tf.keras.layers.Dense(512, activation='swish'),
-    # tf.keras.layers.Dense(256, activation='swish'),
-    # tf.keras.layers.Dense(256, activation='swish'),
-    # Dense(0.2),
-    # Dense(0.2),
-    # tf.keras.layers.Dense(128, activation='swish'),
-    # tf.keras.layers.Dense(128, activation='swish'),
-    # tf.keras.layers.Dense(64, activation='swish'),
-    # tf.keras.layers.Dense(64, activation='swish'),
-    # tf.keras.layers.Dense(32, activation='swish'),
-    # tf.keras.layers.Dense(32, activation='swish'),
-    # tf.keras.layers.Dense(16, activation='swish'),
-    # tf.keras.layers.Dense(16, activation='swish'),
-    # tf.keras.layers.Dense(8, activation='swish'),
-    # tf.keras.layers.Dense(8, activation='swish'),
-    # Dense(1)
-    # tf.keras.layers.Dense(64, activation='swish',kernel_regularizer=tf.keras.regularizers.l2()),
-])
 
-model.compile(
-    optimizer = tf.keras.optimizers.Adam(0.0001),
-    # optimizer = tf.keras.optimizers.Adadelta(),
-    loss = tf.keras.losses.mean_squared_error,
-    # loss = tf.keras.losses.categorical_crossentropy,
-)
+for i in range(i):
+    print("正在搭建模型")
+    model = tf.keras.Sequential([
+        # Embedding(503, 64),
+        # GRU(16, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
+        # GRU(128, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
+        # GRU(128, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
+        # GRU(64),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),
+        # GRU(150, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.5),
+        # GRU(100, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.5),   
+        # GRU(50, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),
+        # GRU(25, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),
+        # GRU(160, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),
+        # GRU(160, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),
+        # GRU(180, return_sequences=True),  # 两层都是RNN时,前一层要加上return_sequences=True
+        # Dropout(0.2),  # 随即扔掉一些神经元, 防止过拟合, 可以先设为0, 逐渐调大, 找到最优值
+        # GRU(140, return_sequences=True),
+        # Dropout(0.2),
+        GRU(300),
+        Dropout(0.5),
+        Dense(1),
+        # Dropout(0.2),
+        # Dense(1),
+        # tf.keras.layers.Flatten(),
+        # GRU(3, return_sequences=True),
+        # GRU(1),
+        # tf.keras.layers.Dense(512, activation='swish'),
+        # tf.keras.layers.Dense(512, activation='swish'),
+        # tf.keras.layers.Dense(256, activation='swish'),
+        # tf.keras.layers.Dense(256, activation='swish'),
+        # Dense(0.2),
+        # Dense(0.2),
+        # tf.keras.layers.Dense(128, activation='swish'),
+        # tf.keras.layers.Dense(128, activation='swish'),
+        # tf.keras.layers.Dense(64, activation='swish'),
+        # tf.keras.layers.Dense(64, activation='swish'),
+        # tf.keras.layers.Dense(32, activation='swish'),
+        # tf.keras.layers.Dense(32, activation='swish'),
+        # tf.keras.layers.Dense(16, activation='swish'),
+        # tf.keras.layers.Dense(16, activation='swish'),
+        # tf.keras.layers.Dense(8, activation='swish'),
+        # tf.keras.layers.Dense(8, activation='swish'),
+        # Dense(1)
+        # tf.keras.layers.Dense(64, activation='swish',kernel_regularizer=tf.keras.regularizers.l2()),
+    ])
 
-# checkpoint_save_path = './savedata/stockflow_month.ckpt'
-# if os.path.exists(checkpoint_save_path + '.index'):
-#     print('-----------------load the model------------------')
-#     model.load_weights(checkpoint_save_path)
+    model.compile(
+        optimizer = tf.keras.optimizers.Adam(0.0001),
+        # optimizer = tf.keras.optimizers.Adadelta(),
+        loss = tf.keras.losses.mean_squared_error,
+        # loss = tf.keras.losses.categorical_crossentropy,
+    )
 
-# cp_callback = tf.keras.callbacks.ModelCheckpoint(
-#     filepath = checkpoint_save_path,
-#     save_weights_only = True,
-#     save_best_only = True,
-#     # monitor = 'var_loss', # 指定需要监测的值
-# )
-print("开始训练")
-history = model.fit(
-    x_train, y_train,
-    batch_size=1, epochs=20,
-    validation_split=0.2,
-    validation_freq=1,
-    # callbacks = [cp_callback],
-)
+    # checkpoint_save_path = './savedata/stockflow_month.ckpt'
+    # if os.path.exists(checkpoint_save_path + '.index'):
+    #     print('-----------------load the model------------------')
+    #     model.load_weights(checkpoint_save_path)
 
-model.summary()      
+    # cp_callback = tf.keras.callbacks.ModelCheckpoint(
+    #     filepath = checkpoint_save_path,
+    #     save_weights_only = True,
+    #     save_best_only = True,
+    #     # monitor = 'var_loss', # 指定需要监测的值
+    # )
+    print("开始训练")
+    history = model.fit(
+        x_train, y_train,
+        batch_size=1, epochs=50,
+        validation_split=0.2,
+        validation_freq=1,
+        # callbacks = [cp_callback],
+    )
 
-
-predict_ori = model.predict(x_test)
-print(predict_ori.shape)
+    model.summary()      
 
 
-predict = sc.inverse_transform(predict_ori)
-print(predict.shape)
-print("开始做图")
+    predict_ori = model.predict(x_test)
+    print(predict_ori.shape)
 
-df = pd.DataFrame(pd.read_csv('./sta_flow_by_day.csv'))
-i=0
-plt.figure()
-for sta in np.array(station.loc[station['线路']=='1号线']['站点名称']):
-    i+=1
+
+    predict = sc.inverse_transform(predict_ori)
+    print(predict.shape)
+    print("开始做图")
+
+    df = pd.DataFrame(pd.read_csv('./sta_flow_by_day.csv'))
+    i=0
+    plt.figure()
+    for sta in np.array(station.loc[station['线路']=='1号线']['站点名称']):
+        i+=1
+        # plt.figure()
+        if sta=='Sta65':
+            print(sta)
+            df_ = df.loc[(df['sta'] == sta)]
+            # x = range(0, len(np.array(df_['month'])))[15:]
+            X = [str(f'{month}.{day}') for month, day in zip(np.array(df_['month']), np.array(df_['day']))][14:]
+            Y = np.array(df_['flow'])[14:]
+            plt.plot( X,Y, label=sta)
+            plt.xticks(range(len(X)), X, rotation=270)
+            plt.legend()
+            break
     # plt.figure()
-    if sta=='Sta65':
-        print(sta)
-        df_ = df.loc[(df['sta'] == sta)]
-        # x = range(0, len(np.array(df_['month'])))[15:]
-        X = [str(f'{month}.{day}') for month, day in zip(np.array(df_['month']), np.array(df_['day']))][14:]
-        Y = np.array(df_['flow'])[14:]
-        plt.plot( X,Y, label=sta)
-        plt.xticks(range(len(X)), X, rotation=270)
-        plt.legend()
-        break
-# plt.figure()
-plt.plot(X, predict, c='r', label='Predict')
-# plt.xticks(range(len(X)), X, rotation=270)
-plt.legend()
+    plt.plot(X, predict, c='r', label='Predict')
+    # plt.xticks(range(len(X)), X, rotation=270)
+    plt.legend()
 
 
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-plt.figure()
-plt.plot(loss, label='Training Loss')
-plt.plot(val_loss, label='Validation Loss')
-plt.title('Training and Validation Loss')
-plt.legend()
-plt.show()
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    plt.figure()
+    plt.plot(loss, label='Training Loss')
+    plt.plot(val_loss, label='Validation Loss')
+    plt.title('Training and Validation Loss')
+    plt.legend()
+    plt.show()
 
 
 
