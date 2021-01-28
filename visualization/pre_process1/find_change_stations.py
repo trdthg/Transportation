@@ -12,13 +12,13 @@ datadict = {
 }
 # 1 红色  2青色  12 黄色  11 蓝色
 mark = []
-with open('./dataFolder/a_b_diff.csv') as f:
+with open('data/a_b_diff.csv') as f:
     f = csv.reader(f)
     for row in f:
         mark.append(0)  
 # print(len(mark),mark)
 
-with open('./dataFolder/a_b_diff.csv') as f:
+with open('data/a_b_diff.csv') as f:
     f = csv.reader(f)
     change_stations = {'X':[], 'T':[], 'I':[]}
     head_tail_sta = []
@@ -60,7 +60,7 @@ with open('./dataFolder/a_b_diff.csv') as f:
 
         # 交叉路线
         elif is_headortail_stain==False and is_headortail_staout==False:
-            with open('./dataFolder/a_b_diff.csv') as f2:
+            with open('./data/a_b_diff.csv') as f2:
                 f2 = csv.reader(f2)
                 for j,row2 in enumerate(f2):
                     if j<i:

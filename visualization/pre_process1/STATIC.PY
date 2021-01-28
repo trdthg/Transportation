@@ -72,7 +72,7 @@ def dict_ergodic_in(father_dict):
         else:
             dict_ergodic(child_dict)  # 深入到下一层
 
-with open('./dataFolder/a_b_same.csv') as f:
+with open('./data/a_b_same.csv') as f:
     f = csv.reader(f)
     i = 0
     for row in f:
