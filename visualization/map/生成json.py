@@ -240,8 +240,8 @@ for route in routes.keys():
                             }
                         )
                         break
-for item in stations:
-    print(item)
+# for i,item in enumerate(stations) :
+#     print(i, ' ' ,item)
 
 
 import json
@@ -291,20 +291,47 @@ routes = {
     '12号线': ['Sta136', 'Sta137', 'Sta101', 'Sta31', 'Sta17', 'Sta26', 'Sta90', 'Sta95', 'Sta72', 'Sta93', 'Sta92', 'Sta116', 'Sta32', 'Sta91', 'Sta60', 'Sta148', 'Sta73']
 }
 paths = []
-middlesta = {
+middlesta_before = {
+     'Stta136':'Sta89',
     'Sta108': 'Sta47',
-    'Sta126': 'Sta115',  'Sta100': 'Sta135', 'Sta35': 'Sta87'  ,
-    'Sta99': 'Sta140', 'Sta54': 'Sta56',
-    'Sta45': 'Sta75', 'Sta162': 'Sta114'
+    'Sta91':'Sta127', 
+    'Sta32':'Sta41',
+    'Sta126':'Sta115',
+    'Sta17':'Sta23', 
+    'Sta63':'Sta129',
+    'Sta93':'Sta3',
+    'Sta162':'Sta114',
+    'Sta72':'Sta15',
+    'Sta95':'Sta134',
+    'Sta90':'Sta84',
+    'Sta100':'Sta135',
+    'Sta35':'Sta87',
+    'Sta99': 'Sta140',
+    'Sta45':'Sta75',
+}
+middlesta_after = {
+    'Sta89':'Sta137',
+    'Sta47':'Sta159',
+    'Sta127':'Sta60',
+    'Sta41':'Sta91',
+    'Sta115':'Sta40',
+    'Sta23':'Sta26',
+
+    'Sta3':'Sta92',
+    'Sta114':'Sta15',
+    'Sta15':'Sta95',
+    'Sta134':'Sta90',
+
+    'Sa135':'Sta167',
+    'Sta87':'Sta109',
+    'Sta75':'152',
 }
 for i,station in enumerate(stations):
     sta = station['station']
-   
     
-    
-    if station['station'] in middlesta.keys:
-        for k,nextstation in enumerate(stations):
-            if nextstation['station']==middlesta[station]:
+    if station['station'] in middlesta_before.keys():
+        for nextstation in stations:
+            if nextstation['station']==middlesta_before[station['station']]:
                 paths.append({
                     'id': i,
                     'x1': station['x'],
@@ -313,15 +340,38 @@ for i,station in enumerate(stations):
                     'y2': nextstation['y'],
                     'leval': '',
                 })
-    if station['line'] != stations[i+1]['line']:
-        # 这条线路结束
-        continue
-    else:
-        paths.append({
-            'id': i,
-            'x1': station['x'],
-            'y1': station['y'],
-            'x2': stations[i+1]['x'],
-            'y2': stations[i+1]['y'],
-            'leval': '',
-        })
+    elif station['station'] in middlesta_after.keys():
+        for nextstation in stations:
+            if nextstation['station']==middlesta_after[station['station']]:
+                paths.append({
+                    'id': i,
+                    'x1': station['x'],
+                    'y1': station['y'],
+                    'x2': nextstation['x'],
+                    'y2': nextstation['y'],
+                    'leval': '',
+                })
+    try:
+        if station['line'] != stations[i+1]['line']:
+            # 这条线路结束
+            continue 
+        else:
+            try:
+                paths.append({
+                    'id': i,
+                    'x1': station['x'],
+                    'y1': station['y'],
+                    'x2': stations[i+1]['x'],
+                    'y2': stations[i+1]['y'],
+                    'leval': '',
+                })
+            except:
+                pass
+    except:
+        pass
+   
+    
+for item in paths:
+    print(item)
+# print(paths)
+write_list_to_json(paths, 'paths.json', './')
