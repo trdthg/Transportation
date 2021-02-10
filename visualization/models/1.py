@@ -72,13 +72,13 @@ daily_flow_scaled = sc.fit_transform(np.array(daily_flow))
 x_train, y_train = [], []
 
 for route, sta, dist, anyday, dayprop, month, day, flow in zip(route_onehot, sta_onehot, dist_onehot, anydays, dayprop_onehot, np.array(df['month']), np.array(df['day']), np.array(daily_flow_scaled)):
-    x_arr = list(route) + list(sta) + list(dist) + list(dayprop) + [int(anyday), month, day]
+    x_arr =  list(route) + list(sta) + list(dist) + list(dayprop) + [int(anyday), month, day]
     y_arr = flow[0]
     x_train.append(x_arr)
     y_train.append(y_arr)
     # print(x_arr)ss
     # print(y_arr)
-    print(len(route),' ', len(sta),' ', len(dist),' ', anyday,' ', len(dayprop),' ', month,' ', day,' ', flow )
+    print(len(route),' ', len(sta),' ', len(dist),' ', anyday,' ', len(dayprop),' ', month,' ', day,' ', )
     # break
 # print(x_train)
 
@@ -92,11 +92,10 @@ print(x_train.shape)
 
 print("正在搭建模型")
 model = tf.keras.Sequential([
-    # tf.keras.layers.Embedding(x_train.shape[1], 50),
-    # tf.keras.layers.Flatten(),
+    tf.keras.layers.Embedding(x_train.shape[1], 50),
+    tf.keras.layers.Flatten(),
     # GRU(3, return_sequences=True),
     # GRU(1),
-    # tf.keras.layers.Dense(512, activation='relu'),
     # tf.keras.layers.Dense(512, activation='relu'),
     # tf.keras.layers.Dense(256, activation='relu'),
     # tf.keras.layers.Dense(256, activation='relu'),
