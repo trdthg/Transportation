@@ -2,12 +2,12 @@ import csv
 from pyasn1.type.univ import Null
 import sys
 sys.setrecursionlimit(15000)
-def main(stain, staout):
+def main(stain='Sta65', staout='Sta20'):
     # readFile = ReadFile()
     # readFile.readTxt()
 
     digkstra = Dijkstra(stain, staout)
-    digkstra.result()
+    return digkstra.result()
     
 
 class Station():
@@ -68,7 +68,7 @@ class ReadFile:
                 line = line[:].split(' ')
                 self.number_of_allstations += len(line)
 
-        print(self.number_of_allstations)
+        # print(self.number_of_allstations)
 
     # @staticmethod
     def readTxt(self, filepath = '1.txt'):
@@ -98,9 +98,9 @@ class ReadFile:
 
 class Dijkstra:
     '''计算路径'''
-    nearestpass = []
-    stain = Null
-    staout = Null
+    # nearestpass = []
+    # stain = Null
+    # staout = Null
 
     def __init__(self, stain='Sta65', staout='Sta128'): 
         # 初始化 stain staout
@@ -119,7 +119,7 @@ class Dijkstra:
             self.stain.getPasses(sta).append(sta)
         # print('初始化', self.stain, self.staout)
         # 添加stain到pass中
-        self.nearestpass.append(self.stain)
+        self.nearestpass= [self.stain]
     
     def getShorterPath(self, station):
         '''获取更近的站点'''
@@ -141,25 +141,30 @@ class Dijkstra:
         nearstation = self.getShorterPath(self.stain)
         if len(self.nearestpass) == self.readFile.number_of_allstations:
             print('第一处判定位置')
-            for sta in self.stain.getPasses(self.staout):
-                print(sta.name,sta.linename,'-> ', end='')
-            return
+            sortedlist = sorted(set(self.stain.getPasses(self.staout)), key=self.stain.getPasses(self.staout).index)
+            namelist = []
+            for i,sta in enumerate(sortedlist):
+                namelist.append(sta.name)
+            return namelist
 
         if nearstation == self.staout:
-                linename = ''
-                print('第二处判定位置')
-                print(f'起点: {self.stain.name} 终点站: {self.staout.name}')
-                sortedlist = sorted(set(self.stain.getPasses(self.staout)), key=self.stain.getPasses(self.staout).index)
-                for i,sta in enumerate(sortedlist):
-                    
-                    if sta==self.staout:
-                        print(sta.name,sta.linename)
-                    else:
-                        if sta.linename != linename and i!=0:
-                            print()
-                        print(sta.name,sta.linename, ' -> ', end='')
-                    linename = sta.linename
-                return
+            linename = ''
+            # print('第二处判定位置')
+            # print(f'起点: {self.stain.name} 终点站: {self.staout.name}')
+            sortedlist = sorted(set(self.stain.getPasses(self.staout)), key=self.stain.getPasses(self.staout).index)
+            namelist = []
+            for i,sta in enumerate(sortedlist):
+                namelist.append(sta.name)
+                # if sta==self.staout:
+                #     print(sta.name,sta.linename)
+                #     pass
+                # else:
+                #     if sta.linename != linename and i!=0:
+                #         print()
+                #     print(sta.name,sta.linename, ' -> ', end='')
+                # linename = sta.linename
+            # print(namelist)
+            return namelist
         for near2station in self.stain.getNearStations(nearstation):
 
             if near2station in self.nearestpass:
@@ -181,8 +186,9 @@ class Dijkstra:
         
         self.nearestpass.append(nearstation)
         # print(len(self.stain.getPasses(nearstation)))
-        self.result()
+        return self.result()
 
-                
+if __name__ == '__main__':
+    main()
 
 
