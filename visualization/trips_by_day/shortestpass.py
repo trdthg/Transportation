@@ -2,11 +2,12 @@ import csv
 from pyasn1.type.univ import Null
 import sys
 sys.setrecursionlimit(15000)
-def main(stain='Sta65', staout='Sta20'):
+def main(stain='Sta135', staout='Sta114'):
     # readFile = ReadFile()
     # readFile.readTxt()
 
     digkstra = Dijkstra(stain, staout)
+    # print(digkstra.result())
     return digkstra.result()
     
 
@@ -20,16 +21,17 @@ class Station():
     def __hash__(self):
         return hash((self.name,))
     # order储存的是能通向该站的站
-    ordermap = {}
-    name = Null
-    linename = Null
-    prestation = Null
-    nextstation = Null
+    # ordermap = {}
+    # name = Null
+    # linename = Null
+    # prestation = Null
+    # nextstation = Null
     def __init__(self, name, linename=Null, prestation=Null, nextstation=Null):
         self.name = name
         self.linename = linename
         self.prestation = prestation
         self.nextstation = nextstation
+        self.ordermap = {}
 
     def getNearStations(self, station):
         '''获取相邻站'''
@@ -140,11 +142,14 @@ class Dijkstra:
         # print(len(self.nearestpass))
         nearstation = self.getShorterPath(self.stain)
         if len(self.nearestpass) == self.readFile.number_of_allstations:
-            print('第一处判定位置')
+            # print('第一处判定位置')
+            # print(self.stain.name, self.staout.name)
             sortedlist = sorted(set(self.stain.getPasses(self.staout)), key=self.stain.getPasses(self.staout).index)
             namelist = []
             for i,sta in enumerate(sortedlist):
                 namelist.append(sta.name)
+                # print(sta.name)
+            # print(namelist)
             return namelist
 
         if nearstation == self.staout:
@@ -157,11 +162,12 @@ class Dijkstra:
                 namelist.append(sta.name)
                 # if sta==self.staout:
                 #     print(sta.name,sta.linename)
-                #     pass
+                    # pass
                 # else:
                 #     if sta.linename != linename and i!=0:
                 #         print()
                 #     print(sta.name,sta.linename, ' -> ', end='')
+                # print(sta.name,sta.linename, ' -> ', end='')
                 # linename = sta.linename
             # print(namelist)
             return namelist
@@ -173,9 +179,12 @@ class Dijkstra:
             if near2station in self.stain.getPasses(near2station):
 
                 if len(self.stain.getPasses(near2station))-1 > length_of_pass:
-                    # self.stain.getPasses(near2station).clear()
-                    # self.stain.getPasses(near2station)
+                    # del self.stain.getPasses(near2station)[:]
                     # print(self.stain.getPasses(near2station).append)
+                    # if (len(self.stain.getPasses(near2station))-2):
+                    #     self.stain.getPasses(near2station).pop(len(self.stain.getPasses(near2station))-1)
+                    # print(self.stain.getPasses(near2station))
+                    # self.stain.getPasses(near2station).append()
                     self.stain.getPasses(near2station).extend(self.stain.getPasses(nearstation))
                     self.stain.getPasses(near2station).append(near2station)
                 else:
