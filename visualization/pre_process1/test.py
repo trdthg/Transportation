@@ -43,7 +43,7 @@ def sss(child_dict):
 #             # 深入到下一层
 #             sss(child_dict_)
 # flag = 0
-# sss(sdict)
+sss(sdict)
 p = ['lll','kkk','iiii','ooo']
 # print(p.index('kkk'))
 import csv

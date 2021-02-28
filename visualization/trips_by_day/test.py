@@ -40,33 +40,55 @@ trips.to_csv('./new_trips.csv')
 # df.to_csv('./small_trips.csv')    
 '''
 
-from sklearn.cluster import SpectralClustering
-import numpy as np
-x1 = [
-    [1, 1], [2, 1], [1, 0],
-    [4, 7], [3, 5], [3, 6]
-]
-X = np.array([
-    # np.array([1,2,3,4,10,20,56,78,65,66]).reshape(-1,1)
-    # [[1, 1], 
-    #  [1, 2]], 
-    # [[2, 2], 
-    #  [1, 1]], 
-    # [[1, 1], 
-    #  [0, 1]],
-    # [[4, 4], 
-    #  [7, 7]], 
-    # [[3, 3], 
-    #  [5, 5]], 
-    # [[3, 3], 
-    #  [6, 7]]
+# from sklearn.cluster import SpectralClustering
+# import numpy as np
+# x1 = [
+#     [1, 1], [2, 1], [1, 0],
+#     [4, 7], [3, 5], [3, 6]
+# ]
+# X = np.array([
+#     # np.array([1,2,3,4,10,20,56,78,65,66]).reshape(-1,1)
+#     # [[1, 1], 
+#     #  [1, 2]], 
+#     # [[2, 2], 
+#     #  [1, 1]], 
+#     # [[1, 1], 
+#     #  [0, 1]],
+#     # [[4, 4], 
+#     #  [7, 7]], 
+#     # [[3, 3], 
+#     #  [5, 5]], 
+#     # [[3, 3], 
+#     #  [6, 7]]
     
-]
-)
+# ]
+# )
               
-clustering = SpectralClustering(n_clusters=3,
-        assign_labels="discretize",
-        random_state=0).fit(X)
-print(clustering.labels_)
+# clustering = SpectralClustering(n_clusters=3,
+#         assign_labels="discretize",
+#         random_state=0).fit(X)
+# print(clustering.labels_)
 
-print(clustering)
+# print(clustering)
+
+
+# print('    '[2])
+
+# import csv
+# with open('./data/station.csv') as f:
+#     f = csv.reader(f)
+#     new_dict = {}
+#     i = -1
+#     for row in f:
+#         i+=1
+#         if i == 0:
+#             continue
+#         print(i)
+#         new_dict[row[1]] = [row[2], row[4]]
+# print(new_dict)
+
+a = {'a':[1,2,3]}
+a['a'].append(1)
+print(a)
+
+

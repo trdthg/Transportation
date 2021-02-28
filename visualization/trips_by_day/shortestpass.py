@@ -2,14 +2,24 @@ import csv
 from pyasn1.type.univ import Null
 import sys
 sys.setrecursionlimit(15000)
+def sss(child_dict):
+    for key in child_dict.keys():
+        print(key)
+        child_dict_ = child_dict[key]
+        if child_dict_ == {}:
+            # 到达尽头
+            continue
+        else:
+            # 深入到下一层
+            sss(child_dict_)
 def main(stain='Sta135', staout='Sta114'):
     # readFile = ReadFile()
     # readFile.readTxt()
 
     digkstra = Dijkstra(stain, staout)
-    # print(digkstra.result())
+    # sss(digkstra.result2())
+    # print(digkstra.result2())
     return digkstra.result()
-    
 
 class Station():
 
@@ -18,20 +28,19 @@ class Station():
             return self.name == other.name
         else:
             return False 
+
     def __hash__(self):
         return hash((self.name,))
-    # order储存的是能通向该站的站
-    # ordermap = {}
-    # name = Null
-    # linename = Null
-    # prestation = Null
-    # nextstation = Null
+
     def __init__(self, name, linename=Null, prestation=Null, nextstation=Null):
         self.name = name
         self.linename = linename
         self.prestation = prestation
         self.nextstation = nextstation
         self.ordermap = {}
+
+    def getLine(self, name):
+        return self.linename
 
     def getNearStations(self, station):
         '''获取相邻站'''
@@ -44,6 +53,9 @@ class Station():
                     nearstations.append(s.prestation)
                 if s.nextstation:
                     nearstations.append(s.nextstation)
+        # for sta in nearstations:
+        #     print(sta.name, end='')
+        # print()
         return nearstations
 
     # 传入一个sta, 把它作为键添加到ordermap中, 值为包含self的集合
@@ -52,11 +64,8 @@ class Station():
             if self.ordermap[station]:
                 return self.ordermap[station]
         except:
-            # stalist = set()
-            # stalist.add(self)
             stalist = [self,]
             self.ordermap[station] = stalist
-            # stalist.add(self)
             return self.ordermap[station]
         
 class ReadFile:
@@ -100,10 +109,6 @@ class ReadFile:
 
 class Dijkstra:
     '''计算路径'''
-    # nearestpass = []
-    # stain = Null
-    # staout = Null
-
     def __init__(self, stain='Sta65', staout='Sta128'): 
         # 初始化 stain staout
         flag = 0
@@ -122,6 +127,7 @@ class Dijkstra:
         # print('初始化', self.stain, self.staout)
         # 添加stain到pass中
         self.nearestpass= [self.stain]
+
     
     def getShorterPath(self, station):
         '''获取更近的站点'''
@@ -142,8 +148,9 @@ class Dijkstra:
         # print(len(self.nearestpass))
         nearstation = self.getShorterPath(self.stain)
         if len(self.nearestpass) == self.readFile.number_of_allstations:
-            # print('第一处判定位置')
+            print('第一处判定位置')
             # print(self.stain.name, self.staout.name)
+            print(self.stain.getPasses(self.staout))
             sortedlist = sorted(set(self.stain.getPasses(self.staout)), key=self.stain.getPasses(self.staout).index)
             namelist = []
             for i,sta in enumerate(sortedlist):
@@ -154,7 +161,7 @@ class Dijkstra:
 
         if nearstation == self.staout:
             linename = ''
-            # print('第二处判定位置')
+            print('第二处判定位置')
             # print(f'起点: {self.stain.name} 终点站: {self.staout.name}')
             sortedlist = sorted(set(self.stain.getPasses(self.staout)), key=self.stain.getPasses(self.staout).index)
             namelist = []
@@ -172,29 +179,17 @@ class Dijkstra:
             # print(namelist)
             return namelist
         for near2station in self.stain.getNearStations(nearstation):
-
             if near2station in self.nearestpass:
                 continue
             length_of_pass = len(self.stain.getPasses(nearstation))
             if near2station in self.stain.getPasses(near2station):
-
                 if len(self.stain.getPasses(near2station))-1 > length_of_pass:
-                    # del self.stain.getPasses(near2station)[:]
-                    # print(self.stain.getPasses(near2station).append)
-                    # if (len(self.stain.getPasses(near2station))-2):
-                    #     self.stain.getPasses(near2station).pop(len(self.stain.getPasses(near2station))-1)
-                    # print(self.stain.getPasses(near2station))
-                    # self.stain.getPasses(near2station).append()
                     self.stain.getPasses(near2station).extend(self.stain.getPasses(nearstation))
                     self.stain.getPasses(near2station).append(near2station)
-                else:
-                    pass
             else:
                 self.stain.getPasses(near2station).extend(self.stain.getPasses(nearstation))
                 self.stain.getPasses(near2station).append(near2station)
-        
         self.nearestpass.append(nearstation)
-        # print(len(self.stain.getPasses(nearstation)))
         return self.result()
 
 if __name__ == '__main__':

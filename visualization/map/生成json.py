@@ -30,6 +30,20 @@ routes = {
     '12号线': ['Sta136', 'Sta137', 'Sta101', 'Sta31', 'Sta17', 'Sta26', 'Sta90', 'Sta95', 'Sta72', 'Sta93', 'Sta92', 'Sta116', 'Sta32', 'Sta91', 'Sta60', 'Sta148', 'Sta73']
 }
 import csv
+import json
+import os
+def write_list_to_json(list, json_file_name, json_file_save_path):
+    """
+    将list写入到json文件
+    :param list:
+    :param json_file_name: 写入的json文件名字
+    :param json_file_save_path: json文件存储路径
+    :return:
+    """
+    os.chdir(json_file_save_path)
+    with open(json_file_name, 'w', encoding='utf-8') as  f:
+        json.dump(list, f)
+
 print(len(routes['2号线']))
 coordinate = {
     '1号线':{
@@ -263,20 +277,7 @@ for i,item in enumerate(stations) :
     print(i, ' ' ,item)
 
 
-import json
-import os
-def write_list_to_json(list, json_file_name, json_file_save_path):
-    """
-    将list写入到json文件
-    :param list:
-    :param json_file_name: 写入的json文件名字
-    :param json_file_save_path: json文件存储路径
-    :return:
-    """
-    os.chdir(json_file_save_path)
-    with open(json_file_name, 'w', encoding='utf-8') as  f:
-        json.dump(list, f)
-write_list_to_json(stations, 'stations.json', './')
+# write_list_to_json(stations, 'stations.json', './')
 
 
 
@@ -347,6 +348,8 @@ for station in stations:
             if nextstation['station']==middlesta_before[station['station']]:
                 if station['station'] == 'Sta90':
                     paths.append({
+                        's1':station['station'],
+                        's2':nextstation['station'],
                         'id': i,
                         'x1': station['x'],
                         'y1': station['y'],
@@ -359,6 +362,8 @@ for station in stations:
                 elif  station['station'] == 'Sta93':
                     paths.append({
                         'id': i,
+                        's1':station['station'],
+                        's2':nextstation['station'],
                         'x1': station['x'],
                         'y1': station['y'],
                         'x2': nextstation['x'],
@@ -370,6 +375,8 @@ for station in stations:
                 else:
                     paths.append({
                         'id': i,
+                        's1':station['station'],
+                        's2':nextstation['station'],
                         'x1': station['x'],
                         'y1': station['y'],
                         'x2': nextstation['x'],
@@ -388,6 +395,8 @@ for station in stations:
                 if station['station']== 'Sta84':
                     paths.append({
                     'id': i,
+                    's1':station['station'],
+                    's2':nextstation['station'],
                     'x1': station['x'],
                     'y1': station['y'],
                     'x2': nextstation['x'],
@@ -398,6 +407,8 @@ for station in stations:
                 elif station['station']=='Sta15':
                     paths.append({
                         'id': i,
+                        's1':station['station'],
+                        's2':nextstation['station'],
                         'x1': station['x'],
                         'y1': station['y'],
                         'x2': nextstation['x'],
@@ -408,6 +419,8 @@ for station in stations:
                     })
                 else:
                     paths.append({
+                        's1':station['station'],
+                        's2':nextstation['station'],
                         'id': i,
                         'x1': station['x'],
                         'y1': station['y'],
@@ -426,6 +439,8 @@ for station in stations:
             try:
                 
                 paths.append({
+                    's1':station['station'],
+                    's2':stations[i+1]['station'],
                     'id': i,
                     'x1': station['x'],
                     'y1': station['y'],
@@ -441,7 +456,12 @@ for station in stations:
         i+=1
         pass
     
+new_dict = {}
 for item in paths:
     print(item)
+    new_dict[(item['s1'], item['s2'])] = item['line']
+    new_dict[(item['s2'], item['s1'])] = item['line']
+print(new_dict)
+    
 # print(paths)
-write_list_to_json(paths, 'paths.json', './')
+# write_list_to_json(paths, 'paths.json', './')
